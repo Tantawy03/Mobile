@@ -32,4 +32,5 @@ class DrawerModel extends FlutterFlowModel<DrawerWidget> {
     chatThreadTileModel2.dispose();
     chatThreadTileModel3.dispose();
   }
+
 }

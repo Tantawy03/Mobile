@@ -156,12 +156,16 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
           ),
           appBar: PreferredSize(
             preferredSize:
-                Size.fromHeight(MediaQuery.sizeOf(context).height * 0.035),
+                Size.fromHeight(MediaQuery.sizeOf(context).height * 0.05),
             child: AppBar(
               backgroundColor: Color(0xFFF7F7F8),
               iconTheme: IconThemeData(color: Color(0xFFC31010)),
               automaticallyImplyLeading: false,
-              leading: Visibility(
+              leading:IconButton(
+                onPressed: (){},
+                icon: Icon(Icons.menu),
+                 ),
+             /* Visibility(
                 visible: responsiveVisibility(
                   context: context,
                   tablet: false,
@@ -196,14 +200,14 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-              ),
+              ),*/
               title: Visibility(
                 visible: responsiveVisibility(
                   context: context,
-                  phone: false,
+                  phone: true,
                 ),
                 child: Align(
-                  alignment: AlignmentDirectional(-1.0, 0.0),
+                  alignment: AlignmentDirectional(0.0, 0.0),
                   child: Text(
                     FFLocalizations.of(context).getText(
                       'wz2khzkr' /* NeuroLift */,
@@ -211,6 +215,7 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                     textAlign: TextAlign.start,
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           fontFamily: 'Open Sans',
+                          fontWeight: FontWeight.bold ,
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 22.0,
                           letterSpacing: 0.0,
@@ -218,7 +223,10 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              actions: [],
+              actions: [
+                IconButton(onPressed: (){},
+                    icon: Icon(Icons.logout)),
+              ],
               centerTitle: false,
               elevation: 2.0,
             ),
