@@ -161,7 +161,15 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
               backgroundColor: Color(0xFFF7F7F8),
               iconTheme: IconThemeData(color: Color(0xFFC31010)),
               automaticallyImplyLeading: false,
-              leading:IconButton(
+              leading:
+              Visibility(
+                visible: responsiveVisibility(
+                  context: context,
+                  tablet: false,
+                  tabletLandscape: false,
+                  desktop: false,
+                ),
+                child:  IconButton(
                 onPressed: () {
                   // Open drawer with smooth sliding animation
                   scaffoldKey.currentState?.openDrawer();
@@ -179,6 +187,8 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                 color: FlutterFlowTheme.of(context).secondaryText,
 
               ),
+              ),
+
              /* Visibility(
                 visible: responsiveVisibility(
                   context: context,
@@ -238,39 +248,95 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                 ),
               ),
               actions: [
-                IconButton(
-                onPressed: () async {
-                  try {
-                    // Sign out from Supabase
-                    await Supabase.instance.client.auth.signOut();
+                Visibility(
+                  visible: responsiveVisibility(
+                    context: context,
+                    phone: false,
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      try {
+                        // Sign out from Supabase
+                        await Supabase.instance.client.auth.signOut();
 
-                    // Clear user-specific state
-                    FFAppState().update(() {
-                      FFAppState().OpenAIKey = 'NO_KEY';
-                    });
+                        // Clear user-specific state
+                        FFAppState().update(() {
+                          FFAppState().OpenAIKey = 'NO_KEY';
+                        });
 
-                    // Navigate to login screen with regular navigation
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/login',
-                          (Route<dynamic> route) => false,
-                    );
+                        // Navigate to login screen with regular navigation
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/login',
+                              (Route<dynamic> route) => false,
+                        );
 
-                  } catch (e) {
-                    print('Sign out error: $e');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Logout failed. Please try again.'),
-                        backgroundColor: FlutterFlowTheme.of(context).error,
+                      } catch (e) {
+                        print('Sign out error: $e');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Logout failed. Please try again.'),
+                            backgroundColor: FlutterFlowTheme.of(context).error,
+                          ),
+                        );
+                      }
+                    },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black, // Change text color here
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Change padding
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Change border radius
+                        ),
+                      textStyle:TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
                       ),
-                    );
-                  }
-                },
-                icon: Icon(
-                  Icons.logout,
-                  color: FlutterFlowTheme.of(context).secondaryText,
-                  size: 24,
+                      ),
+                      child: Text("Sign out"),
+                  ),
+
+                  ),
+
+                Visibility(
+            visible: responsiveVisibility(
+            context: context,
+              tablet: false,
+              tabletLandscape: false,
+              desktop: false,
+            ),
+                  child: IconButton(
+                  onPressed: () async {
+                    try {
+                      // Sign out from Supabase
+                      await Supabase.instance.client.auth.signOut();
+                  
+                      // Clear user-specific state
+                      FFAppState().update(() {
+                        FFAppState().OpenAIKey = 'NO_KEY';
+                      });
+                  
+                      // Navigate to login screen with regular navigation
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/login',
+                            (Route<dynamic> route) => false,
+                      );
+                  
+                    } catch (e) {
+                      print('Sign out error: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Logout failed. Please try again.'),
+                          backgroundColor: FlutterFlowTheme.of(context).error,
+                        ),
+                      );
+                    }
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 24,
+                  ),
+                                ),
                 ),
-              ),
               ],
               centerTitle: false,
               elevation: 2.0,
