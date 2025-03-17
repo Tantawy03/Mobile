@@ -162,9 +162,23 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
               iconTheme: IconThemeData(color: Color(0xFFC31010)),
               automaticallyImplyLeading: false,
               leading:IconButton(
-                onPressed: (){},
-                icon: Icon(Icons.menu),
-                 ),
+                onPressed: () {
+                  // Open drawer with smooth sliding animation
+                  scaffoldKey.currentState?.openDrawer();
+                },
+                icon: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 300),
+                  child: Icon(
+                    Icons.menu,
+                    key: ValueKey<bool>(scaffoldKey.currentState?.isDrawerOpen ?? false),
+                    color: scaffoldKey.currentState?.isDrawerOpen ?? false
+                        ? FlutterFlowTheme.of(context).primary
+                        : FlutterFlowTheme.of(context).secondaryText,
+                  ),
+                ),
+                color: FlutterFlowTheme.of(context).secondaryText,
+
+              ),
              /* Visibility(
                 visible: responsiveVisibility(
                   context: context,
@@ -224,8 +238,39 @@ class _ChatWidgetState extends State<ChatWidget> with TickerProviderStateMixin {
                 ),
               ),
               actions: [
-                IconButton(onPressed: (){},
-                    icon: Icon(Icons.logout)),
+                IconButton(
+                onPressed: () async {
+                  try {
+                    // Sign out from Supabase
+                    await Supabase.instance.client.auth.signOut();
+
+                    // Clear user-specific state
+                    FFAppState().update(() {
+                      FFAppState().OpenAIKey = 'NO_KEY';
+                    });
+
+                    // Navigate to login screen with regular navigation
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login',
+                          (Route<dynamic> route) => false,
+                    );
+
+                  } catch (e) {
+                    print('Sign out error: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Logout failed. Please try again.'),
+                        backgroundColor: FlutterFlowTheme.of(context).error,
+                      ),
+                    );
+                  }
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                  size: 24,
+                ),
+              ),
               ],
               centerTitle: false,
               elevation: 2.0,
